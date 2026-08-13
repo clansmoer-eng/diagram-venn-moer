@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualisasi Diagram Venn - Soal No 3 Silogisme PD2</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f7f6;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 800px;
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 100%;
+    }
+
+    h2 {
+      color: #1a365d;
+      margin-top: 0;
+      text-align: center;
+    }
+
+    .soal-box {
+      background-color: #ebf8ff;
+      border-left: 5px solid #3182ce;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #3182ce;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    button:hover {
+      background-color: #2b6cb0;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button.active {
+      background-color: #2c5282;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .svg-container {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    svg {
+      background-color: #fafafa;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+
+    .explanation {
+      background-color: #f7fafc;
+      border: 1px solid #e2e8f0;
+      padding: 15px;
+      border-radius: 8px;
+      min-height: 80px;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+      font-size: 0.9em;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .color-box {
+      width: 15px;
+      height: 15px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Visualisasi Diagram Venn - Soal No 3</h2>
+
+  <div class="soal-box">
+    <strong>Premis 1:</strong> Tidak ada jenderal di Front Eropa yang tidak menyetujui taktik Blitzkrieg. <em>(Semua Jenderal Front Eropa Menyetujui Blitzkrieg)</em><br>
+    <strong>Premis 2:</strong> Beberapa perwira tinggi Sekutu bertugas di Front Eropa.<br>
+    <strong>Kesimpulan Utama (Opsi E):</strong> Jenderal yang tidak menyetujui taktik Blitzkrieg bukan bagian dari Front Eropa.
+  </div>
+
+  <div class="controls">
+    <button onclick="highlightArea('all')" class="active" id="btn-all">Tampilkan Semua Set</button>
+    <button onclick="highlightArea('p1')" id="btn-p1">Visualisasi Premis 1</button>
+    <button onclick="highlightArea('p2')" id="btn-p2">Visualisasi Premis 2 (Celah Pangkat)</button>
+    <button onclick="highlightArea('opsiC')" id="btn-opsiC">Mengapa Opsi C Jebakan?</button>
+    <button onclick="highlightArea('opsiE')" id="btn-opsiE">Mengapa Opsi E Mutlak Benar?</button>
+  </div>
+
+  <div class="svg-container">
+    <svg width="500" height="380" viewBox="0 0 500 380">
+      <circle id="circle-blitz" cx="200" cy="190" r="150" fill="#e2e8f0" stroke="#4a5568" stroke-width="2" opacity="0.6"/>
+      <text x="70" y="70" fill="#2d3748" font-weight="bold">Kelompok: Menyetujui Blitzkrieg</text>
+
+      <circle id="circle-eropa" cx="210" cy="200" r="95" fill="#cbd5e0" stroke="#2b6cb0" stroke-width="2" opacity="0.6"/>
+      <text x="140" y="140" fill="#1a365d" font-weight="bold">Front Eropa</text>
+
+      <circle id="circle-jenderal" cx="190" cy="220" r="50" fill="#9ae6b4" stroke="#22c55e" stroke-width="2" opacity="0.7"/>
+      <text x="160" y="225" fill="#14532d" font-weight="bold" font-size="12">Jenderal</text>
+
+      <circle id="circle-perwira" cx="340" cy="200" r="85" fill="#fef08a" stroke="#eab308" stroke-width="2" opacity="0.6"/>
+      <text x="310" y="130" fill="#713f12" font-weight="bold">Perwira Tinggi Sekutu</text>
+
+      <path id="highlight-path" fill="none" stroke="none"/>
+    </svg>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="color-box" style="background:#e2e8f0; border:1px solid #4a5568;"></div> Menyetujui Blitzkrieg</div>
+    <div class="legend-item"><div class="color-box" style="background:#cbd5e0; border:1px solid #2b6cb0;"></div> Front Eropa</div>
+    <div class="legend-item"><div class="color-box" style="background:#9ae6b4; border:1px solid #22c55e;"></div> Jenderal</div>
+    <div class="legend-item"><div class="color-box" style="background:#fef08a; border:1px solid #eab308;"></div> Perwira Tinggi Sekutu</div>
+  </div>
+
+  <div class="explanation" id="exp-text">
+    Klik tombol-tombol di atas untuk melihat alur analisis logika secara visual!
+  </div>
+</div>
+
+<script>
+  function highlightArea(type) {
+    // Reset buttons
+    document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + type).classList.add('active');
+
+    // Element references
+    const cBlitz = document.getElementById('circle-blitz');
+    const cEropa = document.getElementById('circle-eropa');
+    const cJenderal = document.getElementById('circle-jenderal');
+    const cPerwira = document.getElementById('circle-perwira');
+    const exp = document.getElementById('exp-text');
+
+    // Default Opacities
+    cBlitz.setAttribute('opacity', '0.3');
+    cEropa.setAttribute('opacity', '0.3');
+    cJenderal.setAttribute('opacity', '0.3');
+    cPerwira.setAttribute('opacity', '0.3');
+
+    if (type === 'all') {
+      cBlitz.setAttribute('opacity', '0.5');
+      cEropa.setAttribute('opacity', '0.5');
+      cJenderal.setAttribute('opacity', '0.7');
+      cPerwira.setAttribute('opacity', '0.5');
+      exp.innerHTML = "<strong>Tampilan Keseluruhan Himpunan:</strong><br>Lingkaran <em>Jenderal</em> berada penuh di dalam <em>Front Eropa</em>, dan keduanya berada di dalam himpunan besar <em>Menyetujui Blitzkrieg</em>. Lingkaran <em>Perwira Tinggi Sekutu</em> beririsan dengan <em>Front Eropa</em>.";
+    } 
+    else if (type === 'p1') {
+      cBlitz.setAttribute('opacity', '0.6');
+      cEropa.setAttribute('opacity', '0.6');
+      cJenderal.setAttribute('opacity', '0.9');
+      exp.innerHTML = "<strong>Visual P1 (Semua Jenderal Front Eropa Menyetujui Blitzkrieg):</strong><br>Lingkaran hijau (Jenderal) ada di dalam lingkaran biru (Front Eropa), dan seluruh Front Eropa ada di dalam area abu-abu (Menyetujui Blitzkrieg). Artinya, TIDAK ADA jenderal di Front Eropa yang berada di luar area menyetujui Blitzkrieg.";
+    } 
+    else if (type === 'p2') {
+      cEropa.setAttribute('opacity', '0.7');
+      cJenderal.setAttribute('opacity', '0.3');
+      cPerwira.setAttribute('opacity', '0.9');
+      exp.innerHTML = "<strong>Visual P2 (Celah Istilah / Pangkat):</strong><br>Irisan terjadi antara lingkaran kuning (Perwira Tinggi Sekutu) dan lingkaran biru (Front Eropa). Namun, irisan tersebut <em>belum tentu menyentuh</em> lingkaran hijau (Jenderal). Perwira tinggi tersebut bisa saja berpangkat Kolonel atau Mayor!";
+    } 
+    else if (type === 'opsiC') {
+      cBlitz.setAttribute('opacity', '0.2');
+      cJenderal.setAttribute('opacity', '0.2');
+      cEropa.setAttribute('opacity', '0.7');
+      cPerwira.setAttribute('opacity', '0.9');
+      exp.innerHTML = "<strong>Mengapa Opsi C (Beberapa perwira tinggi Sekutu menyetujui Blitzkrieg) SALAH?</strong><br>P1 hanya menjamin bahwa <em>Jenderal</em> yang pasti menyetujui Blitzkrieg. Karena Perwira Tinggi Sekutu di Front Eropa belum tentu Jenderal, kita tidak punya bukti sah bahwa perwira tinggi Sekutu tersebut menyetujui Blitzkrieg.";
+    } 
+    else if (type === 'opsiE') {
+      cBlitz.setAttribute('opacity', '0.7');
+      cEropa.setAttribute('opacity', '0.8');
+      cJenderal.setAttribute('opacity', '0.9');
+      exp.innerHTML = "<strong>Mengapa Opsi E (Jenderal yang tidak menyetujui Blitzkrieg bukan bagian Front Eropa) BENAR MUTLAK?</strong><br>Ini adalah bentuk <em>Kontraposisi Direct</em> dari P1. Jika seorang Jenderal berada di LUAL AREA 'Menyetujui Blitzkrieg' (abu-abu), maka dia PASTI berada di luar lingkaran 'Front Eropa' (biru). Pilihan ini 100% sah secara hukum logika!";
+    }
+  }
+
+  // Set default view on page load
+  highlightArea('all');
+</script>
+
+</body>
+</html>
