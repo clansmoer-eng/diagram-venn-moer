@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualisasi Diagram Venn - Silogisme Pejabat & Korupsi</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+            padding: 25px;
+        }
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .premis-box {
+            background: #eef2f5;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .premis-box p {
+            margin: 5px 0;
+            color: #34495e;
+            font-weight: 500;
+        }
+        .svg-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        svg {
+            background-color: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: #3498db;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        button.active {
+            background-color: #27ae60;
+        }
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            min-height: 80px;
+            color: #2c3e50;
+            line-height: 1.5;
+        }
+        /* Style Himpunan */
+        .circle-korupsi { fill: rgba(52, 152, 219, 0.2); stroke: #2980b9; stroke-width: 2; }
+        .circle-pejabat { fill: rgba(231, 76, 60, 0.3); stroke: #c0392b; stroke-width: 2; }
+        .circle-jujur   { fill: rgba(46, 204, 113, 0.3); stroke: #27ae60; stroke-width: 2; }
+        
+        .highlight {
+            fill: #f1c40f !important;
+            fill-opacity: 0.7 !important;
+            stroke: #d35400 !important;
+            stroke-width: 3 !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Visualisasi Diagram Venn Silogisme</h2>
+    
+    <div class="premis-box">
+        <p><strong>Premis 1:</strong> Semua pejabat tidak boleh korupsi.</p>
+        <p><strong>Premis 2:</strong> Beberapa orang yang jujur adalah pejabat.</p>
+        <p><strong>Kesimpulan (D):</strong> <em>Beberapa orang yang jujur tidak boleh korupsi.</em></p>
+    </div>
+
+    <div class="svg-container">
+        <svg width="450" height="350" viewBox="0 0 450 350">
+            <circle cx="200" cy="180" r="140" class="circle-korupsi" />
+            <text x="200" y="55" fill="#2980b9" font-weight="bold" text-anchor="middle">Himpunan: Tidak Boleh Korupsi</text>
+
+            <circle cx="160" cy="190" r="75" class="circle-pejabat" />
+            <text x="140" y="200" fill="#c0392b" font-weight="bold" text-anchor="middle">Pejabat</text>
+
+            <circle cx="290" cy="190" r="85" class="circle-jujur" />
+            <text x="335" y="195" fill="#27ae60" font-weight="bold" text-anchor="middle">Orang Jujur</text>
+
+            <path id="irisan-kesimpulan" d="M 213,137 A 85,85 0 0,1 213,243 A 75,75 0 0,1 213,137" 
+                  fill="transparent" cursor="pointer" />
+
+            <circle id="dot-irisan" cx="195" cy="190" r="6" fill="#e67e22" opacity="0" />
+            <text id="label-irisan" x="195" y="180" fill="#d35400" font-weight="bold" font-size="12" text-anchor="middle" opacity="0">Irisan (Orang Jujur & Pejabat)</text>
+        </svg>
+    </div>
+
+    <div class="btn-group">
+        <button onclick="showStep(1)" id="btn1">1. Tampilkan Premis 1</button>
+        <button onclick="showStep(2)" id="btn2">2. Tampilkan Premis 2</button>
+        <button onclick="showStep(3)" id="btn3">3. Tampilkan Kesimpulan (D)</button>
+        <button onclick="resetView()" id="btnReset">Reset</button>
+    </div>
+
+    <div class="explanation" id="expBox">
+        Klik tombol di atas untuk melihat langkah-langkah pembentukan diagram dan analisis logikanya.
+    </div>
+</div>
+
+<script>
+    function resetView() {
+        document.getElementById('irisan-kesimpulan').classList.remove('highlight');
+        document.getElementById('dot-irisan').setAttribute('opacity', '0');
+        document.getElementById('label-irisan').setAttribute('opacity', '0');
+        
+        document.querySelectorAll('.btn-group button').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById('expBox').innerHTML = 
+            "Diagram menampilkan 3 himpunan:<br>" +
+            "• <strong>Biru:</strong> Kelompok yang Tidak Boleh Korupsi<br>" +
+            "• <strong>Merah:</strong> Kelompok Pejabat<br>" +
+            "• <strong>Hijau:</strong> Kelompok Orang Jujur";
+    }
+
+    function showStep(step) {
+        resetView();
+        const btn = document.getElementById('btn' + step);
+        if (btn) btn.classList.add('active');
+
+        const exp = document.getElementById('expBox');
+
+        if (step === 1) {
+            exp.innerHTML = "<strong>Langkah 1 (Premis 1):</strong> 'Semua pejabat tidak boleh korupsi'.<br>" +
+                "Secara visual, seluruh Lingkaran <strong>Pejabat (Merah)</strong> berada sepenuhnya di dalam Lingkaran <strong>Tidak Boleh Korupsi (Biru)</strong>.";
+        } else if (step === 2) {
+            exp.innerHTML = "<strong>Langkah 2 (Premis 2):</strong> 'Beberapa orang yang jujur adalah pejabat'.<br>" +
+                "Lingkaran <strong>Orang Jujur (Hijau)</strong> dibuat beririsan dengan Lingkaran <strong>Pejabat (Merah)</strong>.";
+            document.getElementById('dot-irisan').setAttribute('opacity', '1');
+            document.getElementById('label-irisan').setAttribute('opacity', '1');
+        } else if (step === 3) {
+            document.getElementById('irisan-kesimpulan').classList.add('highlight');
+            document.getElementById('dot-irisan').setAttribute('opacity', '1');
+            document.getElementById('label-irisan').setAttribute('opacity', '1');
+            
+            exp.innerHTML = "<strong>Langkah 3 (Kesimpulan Valid):</strong> 'Beberapa orang yang jujur tidak boleh korupsi'.<br>" +
+                "Perhatikan area yang disorot <strong>Kuning</strong>! Area tersebut adalah orang jujur yang menjadi pejabat. Karena seluruh pejabat berada di dalam kelompok tidak boleh korupsi, maka area ini <strong>pasti berada di dalam lingkaran tidak boleh korupsi</strong>.";
+        }
+    }
+
+    // Jalankan tampilan awal
+    resetView();
+</script>
+
+</body>
+  </html>
+    
