@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualisasi Diagram Venn - Soal 1 (Modus Tollens)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #333;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 800px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin-top: 0;
+      color: #1a365d;
+      text-align: center;
+    }
+    .premis-box {
+      background: #ebf8ff;
+      border-left: 5px solid #3182ce;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .svg-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+      background: #fafafa;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px;
+    }
+    svg {
+      max-width: 100%;
+      height: auto;
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+    button {
+      background-color: #edf2f7;
+      color: #2d3748;
+      border: 2px solid #cbd5e0;
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #e2e8f0;
+      border-color: #a0aec0;
+    }
+    button.active {
+      background-color: #3182ce;
+      color: white;
+      border-color: #2b6cb0;
+    }
+    .info-box {
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 20px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .status-highlight {
+      font-weight: bold;
+      color: #2b6cb0;
+    }
+    /* SVG Element Styles */
+    .set-circle {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .point-item {
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Visualisasi Logika Deduktif (Modus Tollens)</h2>
+    
+    <div class="premis-box">
+      <strong>Premis 1:</strong> Semua tank Tiger buatan Jerman dilengkapi dengan meriam kaliber 88 mm.<br>
+      <strong>Premis 2:</strong> Tank X tidak dilengkapi dengan meriam kaliber 88 mm.<br>
+      <strong>Kesimpulan Mutlak:</strong> Tank X <u>bukan</u> tank Tiger buatan Jerman.
+    </div>
+
+    <div class="svg-container">
+      <svg width="550" height="380" viewBox="0 0 550 380">
+        <rect x="10" y="10" width="530" height="360" rx="10" fill="#f8fafc" stroke="#cbd5e0" stroke-width="2"/>
+        <text x="25" y="35" fill="#718096" font-weight="bold" font-size="14">Semesta (Semua Jenis Tank)</text>
+
+        <circle id="circleQ" class="set-circle" cx="230" cy="200" r="130" fill="#ebf8ff" stroke="#3182ce" stroke-width="3" opacity="0.8"/>
+        <text x="230" y="88" fill="#2b6cb0" font-weight="bold" font-size="14" text-anchor="middle">Kelompok Meriam 88 mm (Q)</text>
+
+        <circle id="circleP" class="set-circle" cx="230" cy="215" r="75" fill="#feebc8" stroke="#dd6b20" stroke-width="3" opacity="0.9"/>
+        <text x="230" y="215" fill="#c05621" font-weight="bold" font-size="14" text-anchor="middle">Tank Tiger (P)</text>
+        <text x="230" y="235" fill="#7b341e" font-size="12" text-anchor="middle">(Semua P berada di dalam Q)</text>
+
+        <g id="tankXGroup" class="point-item">
+          <circle id="tankXCircle" cx="440" cy="200" r="22" fill="#fed7d7" stroke="#e53e3e" stroke-width="3"/>
+          <text x="440" y="206" fill="#9b2c2c" font-weight="bold" font-size="16" text-anchor="middle">X</text>
+          <text x="440" y="240" fill="#9b2c2c" font-weight="bold" font-size="13" text-anchor="middle">Tank X</text>
+          <text x="440" y="258" fill="#e53e3e" font-size="11" text-anchor="middle">(Tidak Punya Meriam 88mm)</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="controls">
+      <button id="btnP1" onclick="showP1()">1. Lihat Premis 1 (P → Q)</button>
+      <button id="btnP2" onclick="showP2()">2. Lihat Premis 2 (¬Q)</button>
+      <button id="btnKesimpulan" onclick="showKesimpulan()">3. Kesimpulan (Modus Tollens)</button>
+      <button id="btnReset" onclick="resetDiagram()">Reset Diagram</button>
+    </div>
+
+    <div class="info-box" id="infoBox">
+      Klik tombol di atas untuk melihat langkah-langkah penarikan kesimpulan secara visual.
+    </div>
+  </div>
+
+  <script>
+    const circleP = document.getElementById('circleP');
+    const circleQ = document.getElementById('circleQ');
+    const tankXCircle = document.getElementById('tankXCircle');
+    const infoBox = document.getElementById('infoBox');
+    const buttons = document.querySelectorAll('.controls button');
+
+    function setActiveButton(id) {
+      buttons.forEach(btn => btn.classList.remove('active'));
+      if(id) document.getElementById(id).classList.add('active');
+    }
+
+    function resetDiagram() {
+      circleP.setAttribute('fill', '#feebc8');
+      circleP.setAttribute('stroke', '#dd6b20');
+      circleP.setAttribute('stroke-width', '3');
+      
+      circleQ.setAttribute('fill', '#ebf8ff');
+      circleQ.setAttribute('stroke', '#3182ce');
+      circleQ.setAttribute('stroke-width', '3');
+
+      tankXCircle.setAttribute('fill', '#fed7d7');
+      tankXCircle.setAttribute('stroke', '#e53e3e');
+      tankXCircle.setAttribute('stroke-width', '3');
+
+      infoBox.innerHTML = "Diagram di-reset. Pilih salah satu tahapan logika di atas.";
+      setActiveButton('btnReset');
+    }
+
+    function showP1() {
+      resetDiagram();
+      setActiveButton('btnP1');
+      
+      circleP.setAttribute('fill', '#fbd38d');
+      circleQ.setAttribute('fill', '#bee3f8');
+
+      infoBox.innerHTML = `
+        <span class="status-highlight">Langkah 1 (Premis 1):</span> "Semua Tank Tiger (P) memiliki Meriam 88 mm (Q)".<br>
+        • Secara visual, lingkaran <strong>Tank Tiger (P)</strong> berada <em>sepenuhnya di dalam</em> lingkaran <strong>Meriam 88 mm (Q)</strong>.<br>
+        • Ini berarti jika suatu objek berada di luar lingkaran biru (Q), objek tersebut MUSTAHIL bisa masuk ke lingkaran oranye (P).
+      `;
+    }
+
+    function showP2() {
+      resetDiagram();
+      setActiveButton('btnP2');
+
+      tankXCircle.setAttribute('fill', '#feb2b2');
+      tankXCircle.setAttribute('stroke-width', '5');
+
+      infoBox.innerHTML = `
+        <span class="status-highlight">Langkah 2 (Premis 2):</span> "Tank X tidak dilengkapi dengan meriam kaliber 88 mm (¬Q)".<br>
+        • Karena Tank X tidak memiliki meriam 88 mm, posisi <strong>Tank X</strong> wajib diletakkan di <strong>LUAR</strong> lingkaran biru (Q).
+      `;
+    }
+
+    function showKesimpulan() {
+      resetDiagram();
+      setActiveButton('btnKesimpulan');
+
+      circleP.setAttribute('fill', '#e2e8f0');
+      circleP.setAttribute('stroke', '#a0aec0');
+
+      tankXCircle.setAttribute('fill', '#fc8181');
+      tankXCircle.setAttribute('stroke', '#9b2c2c');
+
+      infoBox.innerHTML = `
+        <span class="status-highlight">Kesimpulan Mutlak (Modus Tollens):</span><br>
+        • Karena Tank X berada di luar lingkaran Biru (Meriam 88 mm), maka Tank X <strong>100% PASTI berada di luar lingkaran Oranye (Tank Tiger)</strong>.<br>
+        • <strong>Kesimpulan:</strong> Tank X <u>BUKAN</u> tank Tiger buatan Jerman.<br>
+        • <em>Catatan:</em> Karena kesimpulan ini bersifat mutlak (100% pasti secara geometris & logika), kata <strong>"mungkin"</strong> pada opsi jawaban adalah <strong>salah</strong>.
+      `;
+    }
+  </script>
+</body>
+  </html>
+  
