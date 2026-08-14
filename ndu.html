@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualisasi Diagram Venn - Soal 3 (Denying the Antecedent)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: #f4f7f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      max-width: 820px;
+      width: 100%;
+      padding: 25px;
+      text-align: center;
+    }
+    h2 {
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+    p.subtitle {
+      color: #7f8c8d;
+      margin-top: 0;
+      font-size: 14px;
+    }
+    .svg-container {
+      margin: 20px 0;
+      background: #fafafa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+    svg {
+      width: 100%;
+      height: 380px;
+    }
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s ease;
+    }
+    button:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+    }
+    button.active {
+      background-color: #27ae60;
+      box-shadow: 0 0 8px rgba(39, 174, 96, 0.4);
+    }
+    .explanation-box {
+      background-color: #e8f4f8;
+      border-left: 5px solid #3498db;
+      padding: 15px;
+      border-radius: 4px;
+      text-align: left;
+      color: #2c3e50;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    /* Elements transition */
+    #circle-batalyon {
+      transition: all 0.6s ease-in-out;
+    }
+    
+    /* Diagram Styling */
+    .circle-baju { fill: #3498db; fill-opacity: 0.18; stroke: #2980b9; stroke-width: 2; }
+    .circle-timur { fill: #e67e22; fill-opacity: 0.35; stroke: #d35400; stroke-width: 2; }
+    .circle-batalyon-style { fill: #9b59b6; fill-opacity: 0.5; stroke: #8e44ad; stroke-width: 3; }
+    
+    .highlight-area {
+      stroke-width: 4 !important;
+      filter: drop-shadow(0px 0px 6px rgba(0,0,0,0.2));
+    }
+    
+    .text-label {
+      font-size: 12px;
+      font-weight: bold;
+      fill: #2c3e50;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Visualisasi Diagram Venn: Soal 3</h2>
+  <p class="subtitle">Analisis Kesesatan Logika "Menolak Anteceden" (Afrika Utara vs Front Timur)</p>
+
+  <div class="button-group">
+    <button id="btn-p1" onclick="showP1()">1. Premis 1</button>
+    <button id="btn-p2" onclick="showP2()">2. Premis 2</button>
+    <button id="btn-sken1" onclick="showSkenario1()">3. Skenario A (Di Luar Baju Tebal)</button>
+    <button id="btn-sken2" onclick="showSkenario2()">4. Skenario B (Di Dalam Baju Tebal)</button>
+    <button id="btn-kesimpulan" onclick="showKesimpulan()">5. Kesimpulan (Opsi E)</button>
+    <button id="btn-reset" onclick="resetView()">Reset</button>
+  </div>
+
+  <div class="svg-container">
+    <svg viewBox="0 0 650 350">
+      <circle id="circle-baju" cx="240" cy="175" r="130" class="circle-baju" />
+      <text x="240" y="65" text-anchor="middle" class="text-label" fill="#2980b9">Penerima Perlengkapan Musim Dingin Tebal (B)</text>
+
+      <circle id="circle-timur" cx="190" cy="185" r="65" class="circle-timur" />
+      <text x="190" y="188" text-anchor="middle" class="text-label" fill="#d35400">Tentara Front Timur (A)</text>
+
+      <circle id="circle-batalyon" cx="490" cy="175" r="45" class="circle-batalyon-style" />
+      <text id="text-batalyon" x="490" y="179" text-anchor="middle" class="text-label" fill="#ffffff">Divisi Batalyon X</text>
+      
+      <line id="line-forbidden" x1="190" y1="185" x2="490" y2="175" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5,5" opacity="0" />
+      <text id="text-forbidden" x="340" y="170" text-anchor="middle" fill="#c0392b" font-size="12" font-weight="bold" opacity="0">❌ Terpisah (Bukan Front Timur)</text>
+    </svg>
+  </div>
+
+  <div id="explanation" class="explanation-box">
+    Klik tombol di atas secara berurutan untuk melihat pembuktian logika mengapa tidak ada kesimpulan pasti yang dapat ditarik.
+  </div>
+</div>
+
+<script>
+  const circleBaju = document.getElementById('circle-baju');
+  const circleTimur = document.getElementById('circle-timur');
+  const circleBatalyon = document.getElementById('circle-batalyon');
+  const textBatalyon = document.getElementById('text-batalyon');
+  const lineForbidden = document.getElementById('line-forbidden');
+  const textForbidden = document.getElementById('text-forbidden');
+  const exp = document.getElementById('explanation');
+  const buttons = document.querySelectorAll('.button-group button');
+
+  function clearActive() {
+    buttons.forEach(b => b.classList.remove('active'));
+    circleBaju.classList.remove('highlight-area');
+    circleTimur.classList.remove('highlight-area');
+    circleBatalyon.classList.remove('highlight-area');
+    lineForbidden.setAttribute('opacity', '0');
+    textForbidden.setAttribute('opacity', '0');
+  }
+
+  function moveBatalyon(cx, cy) {
+    circleBatalyon.setAttribute('cx', cx);
+    circleBatalyon.setAttribute('cy', cy);
+    textBatalyon.setAttribute('x', cx);
+    textBatalyon.setAttribute('y', cy + 4);
+  }
+
+  function showP1() {
+    clearActive();
+    document.getElementById('btn-p1').classList.add('active');
+    circleBaju.classList.add('highlight-area');
+    circleTimur.classList.add('highlight-area');
+    moveBatalyon(510, 175);
+    exp.innerHTML = "<b>Premis 1:</b> <i>Semua tentara Jerman yang bertugas di Front Timur dibekali perlengkapan musim dingin tebal.</i><br><b>Visual:</b> Lingkaran <b>Front Timur (A)</b> berada sepenuhnya di dalam himpunan <b>Penerima Baju Musim Dingin (B)</b>.";
+  }
+
+  function showP2() {
+    clearActive();
+    document.getElementById('btn-p2').classList.add('active');
+    circleTimur.classList.add('highlight-area');
+    circleBatalyon.classList.add('highlight-area');
+    moveBatalyon(510, 175);
+    lineForbidden.setAttribute('x2', '510');
+    lineForbidden.setAttribute('opacity', '1');
+    textForbidden.setAttribute('opacity', '1');
+    exp.innerHTML = "<b>Premis 2:</b> <i>Divisi Batalyon X bertugas di Front Afrika Utara.</i><br><b>Visual:</b> Divisi Batalyon X berada di luar lingkaran Front Timur. <b>PENTING:</b> Keterangan ini hanya melarang Batalyon X masuk ke lingkaran Front Timur, tetapi tidak memberi aturan terhadap lingkaran Baju Tebal!";
+  }
+
+  function showSkenario1() {
+    clearActive();
+    document.getElementById('btn-sken1').classList.add('active');
+    circleBatalyon.classList.add('highlight-area');
+    moveBatalyon(480, 175); // Posisi di luar Baju Tebal
+    exp.innerHTML = "<b>Kemungkinan Skenario A:</b><br>Divisi Batalyon X berada di luar lingkaran Front Timur <b>SEKALIGUS di luar</b> lingkaran Penerima Baju Tebal.<br><i>Kesimpulan jika skenario ini terjadi: Batalyon X TIDAK dibekali baju tebal (Opsi A).</i>";
+  }
+
+  function showSkenario2() {
+    clearActive();
+    document.getElementById('btn-sken2').classList.add('active');
+    circleBaju.classList.add('highlight-area');
+    circleBatalyon.classList.add('highlight-area');
+    moveBatalyon(310, 220); // Posisi di dalam Baju Tebal, tapi di luar Front Timur
+    exp.innerHTML = "<b>Kemungkinan Skenario B:</b><br>Divisi Batalyon X berada di luar Front Timur, tetapi <b>TETAP DI DALAM</b> lingkaran Baju Tebal (misal: untuk udara dingin gurun padang pasir malam hari).<br><i>Kesimpulan jika skenario ini terjadi: Batalyon X DIBEKALI baju tebal (Opsi B).</i>";
+  }
+
+  function showKesimpulan() {
+    clearActive();
+    document.getElementById('btn-kesimpulan').classList.add('active');
+    circleBatalyon.classList.add('highlight-area');
+    moveBatalyon(480, 175);
+    exp.innerHTML = "<b>Kesimpulan Mutlak (Opsi E):</b> <u>Tidak dapat disimpulkan</u>.<br><b>Alasan Logis:</b> Karena Skenario A (tidak dibekali) dan Skenario B (dibekali) sama-sama bernilai SAH menurut premis, kita tidak memiliki kepastian mutlak. Dalam logika formal, ini dinamakan kesesatan <i><b>Denying the Antecedent</b></i>.";
+  }
+
+  function resetView() {
+    clearActive();
+    document.getElementById('btn-reset').classList.add('active');
+    moveBatalyon(490, 175);
+    exp.innerHTML = "Klik tombol di atas secara berurutan untuk melihat pembuktian logika mengapa tidak ada kesimpulan pasti yang dapat ditarik.";
+  }
+</script>
+
+</body>
+  </html>
+  
