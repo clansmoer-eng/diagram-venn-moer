@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualisasi Diagram Venn - Soal 8 (Opsi C)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: #f4f7f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      max-width: 800px;
+      width: 100%;
+      padding: 25px;
+      text-align: center;
+    }
+    h2 {
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+    p.subtitle {
+      color: #7f8c8d;
+      margin-top: 0;
+      font-size: 14px;
+    }
+    .svg-container {
+      margin: 20px 0;
+      background: #fafafa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+    svg {
+      width: 100%;
+      height: 380px;
+    }
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    button:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+    }
+    button.active {
+      background-color: #27ae60;
+      box-shadow: 0 0 8px rgba(39, 174, 96, 0.4);
+    }
+    .explanation-box {
+      background-color: #e8f4f8;
+      border-left: 5px solid #3498db;
+      padding: 15px;
+      border-radius: 4px;
+      text-align: left;
+      color: #2c3e50;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    /* Venn Styling */
+    .circle-a { fill: #3498db; fill-opacity: 0.3; stroke: #2980b9; stroke-width: 2; }
+    .circle-b { fill: #f1c40f; fill-opacity: 0.2; stroke: #f39c12; stroke-width: 2; }
+    .circle-c { fill: #e74c3c; fill-opacity: 0.3; stroke: #c0392b; stroke-width: 2; }
+    
+    .highlight-area {
+      fill: #2ecc71 !important;
+      fill-opacity: 0.6 !important;
+      stroke: #27ae60 !important;
+      stroke-width: 3 !important;
+    }
+    .text-label {
+      font-size: 13px;
+      font-weight: bold;
+      fill: #2c3e50;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Visualisasi Diagram Venn: Soal 8 (Opsi C)</h2>
+  <p class="subtitle">Analisis Hubungan Divisi 101, Senapan M1 Garand, & Kekurangan Amunisi</p>
+
+  <div class="button-group">
+    <button id="btn-p1" onclick="showP1()">Lihat Premis 1</button>
+    <button id="btn-p2" onclick="showP2()">Lihat Premis 2</button>
+    <button id="btn-kesimpulan" onclick="showKesimpulan()">Lihat Kesimpulan (Opsi C)</button>
+    <button id="btn-reset" onclick="resetView()">Reset</button>
+  </div>
+
+  <div class="svg-container">
+    <svg viewBox="0 0 600 350">
+      <circle id="circle-div101" cx="220" cy="180" r="45" class="circle-a" />
+      
+      <circle id="circle-m1" cx="220" cy="180" r="95" class="circle-b" />
+
+      <circle id="circle-kurang" cx="440" cy="180" r="85" class="circle-c" />
+
+      <text x="220" y="185" text-anchor="middle" class="text-label">Divisi 101 (A)</text>
+      <text x="220" y="105" text-anchor="middle" class="text-label">Pengguna M1 Garand (B)</text>
+      <text x="440" y="185" text-anchor="middle" class="text-label">Kekurangan Amunisi (C)</text>
+      
+      <text id="no-intersect-text" x="330" y="185" text-anchor="middle" fill="#e74c3c" font-size="22" font-weight="bold">🚫</text>
+    </svg>
+  </div>
+
+  <div id="explanation" class="explanation-box">
+    Klik salah satu tombol di atas untuk melihat alur pembuktian logika Diagram Venn.
+  </div>
+</div>
+
+<script>
+  const div101 = document.getElementById('circle-div101');
+  const m1 = document.getElementById('circle-m1');
+  const kurang = document.getElementById('circle-kurang');
+  const exp = document.getElementById('explanation');
+  const buttons = document.querySelectorAll('.button-group button');
+
+  function clearActive() {
+    buttons.forEach(b => b.classList.remove('active'));
+    div101.classList.remove('highlight-area');
+    m1.classList.remove('highlight-area');
+    kurang.classList.remove('highlight-area');
+  }
+
+  function showP1() {
+    clearActive();
+    document.getElementById('btn-p1').classList.add('active');
+    div101.classList.add('highlight-area');
+    exp.innerHTML = "<b>Premis 1:</b> <i>Semua prajurit Divisi Lintas Udara ke-101 menggunakan senapan M1 Garand.</i><br><b>Visual:</b> Lingkaran <b>Divisi 101 (Hijau)</b> berada sepenuhnya di dalam lingkaran <b>Pengguna M1 Garand</b>.";
+  }
+
+  function showP2() {
+    clearActive();
+    document.getElementById('btn-p2').classList.add('active');
+    m1.classList.add('highlight-area');
+    kurang.classList.add('highlight-area');
+    exp.innerHTML = "<b>Premis 2:</b> <i>Tidak ada prajurit yang menggunakan senapan M1 Garand yang kekurangan amunisi di Arnhem.</i><br><b>Visual:</b> Lingkaran <b>Pengguna M1 Garand</b> terpisah total (disjoint/tidak beririsan) dengan Lingkaran <b>Kekurangan Amunisi</b>.";
+  }
+
+  function showKesimpulan() {
+    clearActive();
+    document.getElementById('btn-kesimpulan').classList.add('active');
+    div101.classList.add('highlight-area');
+    kurang.classList.add('highlight-area');
+    exp.innerHTML = "<b>Kesimpulan (Opsi C):</b> <i>Tidak ada prajurit Divisi Lintas Udara ke-101 yang kekurangan amunisi di Arnhem.</i><br><b>Pembuktian:</b> Karena Divisi 101 ada di dalam M1 Garand, dan M1 Garand terpisah total dari Kekurangan Amunisi, maka Divisi 101 <b>pasti terpisah total</b> dari Kekurangan Amunisi.";
+  }
+
+  function resetView() {
+    clearActive();
+    document.getElementById('btn-reset').classList.add('active');
+    exp.innerHTML = "Klik salah satu tombol di atas untuk melihat alur pembuktian logika Diagram Venn.";
+  }
+</script>
+
+</body>
+  </html>
+  
