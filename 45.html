@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagram Venn Silogisme Praktisi</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      margin: 0;
+    }
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 650px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    h2 { color: #1e293b; text-align: center; margin-top: 0; }
+    .premis-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #3b82f6;
+      padding: 10px 15px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    svg {
+      width: 100%;
+      height: 320px;
+      background-color: #fafafa;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+    .btn-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #2563eb;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover { background-color: #1d4ed8; }
+    button.reset { background-color: #64748b; }
+    button.reset:hover { background-color: #475569; }
+    .explanation {
+      margin-top: 20px;
+      padding: 12px 16px;
+      background-color: #eff6ff;
+      border-radius: 6px;
+      color: #1e40af;
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 48px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Visualisasi Diagram Venn Silogisme</h2>
+  
+  <div class="premis-box">
+    <strong>Premis 1:</strong> Semua praktisi adalah pekerja industri.<br>
+    <strong>Premis 2:</strong> Semua praktisi adalah pengajar di kampus.
+  </div>
+
+  <svg viewBox="0 0 500 300">
+    <!-- Himpunan Pekerja Industri (Lingkaran Biru) -->
+    <circle id="circle-industri" cx="200" cy="150" r="110" fill="#93c5fd" stroke="#2563eb" stroke-width="2" opacity="0.5"/>
+    
+    <!-- Himpunan Pengajar Kampus (Lingkaran Hijau) -->
+    <circle id="circle-kampus" cx="300" cy="150" r="110" fill="#86efac" stroke="#16a34a" stroke-width="2" opacity="0.5"/>
+    
+    <!-- Himpunan Praktisi (Lingkaran Merah / Irisan Utama) -->
+    <circle id="circle-praktisi" cx="250" cy="150" r="45" fill="#fca5a5" stroke="#dc2626" stroke-width="2.5" opacity="0.8"/>
+
+    <!-- Teks Label -->
+    <text x="120" y="80" fill="#1e40af" font-size="13" font-weight="bold">Pekerja Industri</text>
+    <text x="310" y="80" fill="#14532d" font-size="13" font-weight="bold">Pengajar Kampus</text>
+    <text x="228" y="155" fill="#7f1d1d" font-size="12" font-weight="bold">Praktisi</text>
+  </svg>
+
+  <div class="btn-container">
+    <button onclick="highlightPremis1()">Sorot Premis 1</button>
+    <button onclick="highlightPremis2()">Sorot Premis 2</button>
+    <button onclick="highlightKesimpulan()">Sorot Opsi C (Kesimpulan)</button>
+    <button class="reset" onclick="resetView()">Reset</button>
+  </div>
+
+  <div class="explanation" id="exp-text">
+    Klik tombol di atas untuk mensimulasikan pembentukan diagram logika secara step-by-step.
+  </div>
+</div>
+
+<script>
+  const industri = document.getElementById('circle-industri');
+  const kampus = document.getElementById('circle-kampus');
+  const praktisi = document.getElementById('circle-praktisi');
+  const exp = document.getElementById('exp-text');
+
+  function resetView() {
+    industri.setAttribute('opacity', '0.5');
+    kampus.setAttribute('opacity', '0.5');
+    praktisi.setAttribute('opacity', '0.8');
+    exp.innerHTML = "Klik tombol di atas untuk mensimulasikan pembentukan diagram logika secara step-by-step.";
+  }
+
+  function highlightPremis1() {
+    resetView();
+    industri.setAttribute('opacity', '0.8');
+    praktisi.setAttribute('opacity', '1');
+    exp.innerHTML = "<strong>Premis 1:</strong> Seluruh himpunan <i>Praktisi</i> (merah) berada di dalam himpunan <i>Pekerja Industri</i> (biru).";
+  }
+
+  function highlightPremis2() {
+    resetView();
+    kampus.setAttribute('opacity', '0.8');
+    praktisi.setAttribute('opacity', '1');
+    exp.innerHTML = "<strong>Premis 2:</strong> Seluruh himpunan <i>Praktisi</i> (merah) juga berada di dalam himpunan <i>Pengajar Kampus</i> (hijau).";
+  }
+
+  function highlightKesimpulan() {
+    resetView();
+    praktisi.setAttribute('opacity', '1');
+    exp.innerHTML = "<strong>Kesimpulan (Opsi C):</strong> Karena Praktisi sepenuhnya berada di dalam kedua himpunan besar tersebut, wilayah Praktisi menjadi <b>irisan mutlak</b> antara Pekerja Industri dan Pengajar Kampus. Maka terbukti: <i>Ada pengajar di kampus yang menjadi pekerja industri</i> (yaitu kelompok praktisi tersebut).";
+  }
+</script>
+
+</body>
+  </html>
+  
