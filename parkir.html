@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualisasi Diagram Venn - Petugas Kebersihan</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      background-color: #f1f5f9;
+      color: #334155;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .card {
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      max-width: 680px;
+      width: 100%;
+    }
+    h2 {
+      color: #0f172a;
+      text-align: center;
+      margin-top: 0;
+      font-size: 1.4rem;
+    }
+    .premis-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #10b981;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .svg-container {
+      display: flex;
+      justify-content: center;
+      background: #fafafa;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px;
+    }
+    svg {
+      width: 100%;
+      height: 320px;
+    }
+    .btn-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #0f172a;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    button:hover {
+      background-color: #334155;
+      transform: translateY(-1px);
+    }
+    button.highlight {
+      background-color: #10b981;
+    }
+    button.highlight:hover {
+      background-color: #059669;
+    }
+    button.reset {
+      background-color: #64748b;
+    }
+    button.reset:hover {
+      background-color: #475569;
+    }
+    .explanation {
+      margin-top: 20px;
+      padding: 14px 18px;
+      background-color: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      color: #065f46;
+      font-size: 0.93rem;
+      line-height: 1.6;
+      min-height: 60px;
+    }
+    .circle-style {
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Diagram Venn Interaktif: Petugas Kebersihan</h2>
+  
+  <div class="premis-box">
+    <strong>Premis 1:</strong> Semua (10) petugas kebersihan kantor pusat mengenakan rompi hijau saat bekerja.<br>
+    <strong>Premis 2:</strong> Sebagian dari mereka bertugas membersihkan area parkir.
+  </div>
+
+  <div class="svg-container">
+    <svg viewBox="0 0 500 300">
+      <!-- Himpunan Semesta / Rompi Hijau (Lingkaran Hijau Besar) -->
+      <circle id="c-rompi" class="circle-style" cx="250" cy="150" r="130" fill="#a7f3d0" stroke="#10b981" stroke-width="2.5" opacity="0.4"/>
+      
+      <!-- Sub-Himpunan 10 Petugas Kebersihan Kantor Pusat (Lingkaran Biru di dalam Rompi Hijau) -->
+      <circle id="c-petugas" class="circle-style" cx="210" cy="150" r="85" fill="#93c5fd" stroke="#2563eb" stroke-width="2" opacity="0.6"/>
+      
+      <!-- Himpunan Area Parkir (Lingkaran Beririsan) -->
+      <circle id="c-parkir" class="circle-style" cx="290" cy="150" r="65" fill="#fde047" stroke="#ca8a04" stroke-width="2" opacity="0.5"/>
+
+      <!-- Teks Label -->
+      <text x="250" y="40" fill="#047857" font-size="13" font-weight="bold" text-anchor="middle">Pemakai Rompi Hijau (Semua 10 Petugas)</text>
+      
+      <text x="165" y="145" fill="#1e40af" font-size="12" font-weight="bold" text-anchor="middle">Bukan Area Parkir</text>
+      <text x="165" y="162" fill="#1e40af" font-size="11" text-anchor="middle">(Beberapa Petugas)</text>
+      
+      <text x="248" y="145" fill="#854d0e" font-size="12" font-weight="bold" text-anchor="middle">Area Parkir</text>
+      <text x="248" y="162" fill="#854d0e" font-size="11" text-anchor="middle">(Sebagian)</text>
+
+      <text x="325" y="150" fill="#713f12" font-size="11" font-weight="bold" text-anchor="middle">Parkir Lain</text>
+    </svg>
+  </div>
+
+  <div class="btn-container">
+    <button onclick="showPremis1()">Premis 1 (Rompi Hijau)</button>
+    <button onclick="showPremis2()">Premis 2 (Area Parkir)</button>
+    <button class="highlight" onclick="showKesimpulan()">Sorot Opsi C (Beberapa Tidak di Parkir)</button>
+    <button class="reset" onclick="resetView()">Reset</button>
+  </div>
+
+  <div class="explanation" id="exp-text">
+    Klik tombol di atas untuk melihat pembentukan hubungan himpunan secara bertahap.
+  </div>
+</div>
+
+<script>
+  const rompi = document.getElementById('c-rompi');
+  const petugas = document.getElementById('c-petugas');
+  const parkir = document.getElementById('c-parkir');
+  const exp = document.getElementById('exp-text');
+
+  function resetView() {
+    rompi.setAttribute('opacity', '0.4');
+    petugas.setAttribute('opacity', '0.6');
+    parkir.setAttribute('opacity', '0.5');
+    exp.innerHTML = "Klik tombol di atas untuk melihat pembentukan hubungan himpunan secara bertahap.";
+  }
+
+  function showPremis1() {
+    resetView();
+    rompi.setAttribute('opacity', '0.8');
+    petugas.setAttribute('opacity', '0.9');
+    exp.innerHTML = "<strong>Premis 1:</strong> Seluruh 10 <i>Petugas Kebersihan Kantor Pusat</i> (biru) berada 100% di dalam himpunan <i>Pemakai Rompi Hijau</i> (hijau).";
+  }
+
+  function showPremis2() {
+    resetView();
+    petugas.setAttribute('opacity', '0.8');
+    parkir.setAttribute('opacity', '0.8');
+    exp.innerHTML = "<strong>Premis 2:</strong> Himpunan <i>Area Parkir</i> (kuning) beririsan dengan <i>Petugas Kebersihan</i>. Hanya <b>sebagian</b> petugas yang berada di area parkir.";
+  }
+
+  function showKesimpulan() {
+    resetView();
+    petugas.setAttribute('opacity', '1');
+    parkir.setAttribute('opacity', '0.6');
+    exp.innerHTML = "<strong>Kesimpulan (Opsi C):</strong> Karena hanya <i>sebagian</i> petugas kebersihan yang bertugas di area parkir, maka secara pasti ada sisa/bagian lain dari petugas tersebut yang <b>TIDAK bertugas di area parkir</b>.";
+  }
+</script>
+
+</body>
+  </html>
+  
