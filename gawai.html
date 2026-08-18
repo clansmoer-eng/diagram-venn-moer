@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagram Venn Interaktif - Seleksi Administrasi & Tes Kompetensi</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      background-color: #f1f5f9;
+      color: #334155;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .card {
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      max-width: 680px;
+      width: 100%;
+    }
+    h2 {
+      color: #0f172a;
+      text-align: center;
+      margin-top: 0;
+      font-size: 1.3rem;
+    }
+    .premis-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #3b82f6;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .svg-container {
+      display: flex;
+      justify-content: center;
+      background: #fafafa;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px;
+    }
+    svg {
+      width: 100%;
+      height: 320px;
+    }
+    .btn-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #0f172a;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    button:hover {
+      background-color: #334155;
+      transform: translateY(-1px);
+    }
+    button.highlight {
+      background-color: #10b981;
+    }
+    button.highlight:hover {
+      background-color: #059669;
+    }
+    button.reset {
+      background-color: #64748b;
+    }
+    .explanation {
+      margin-top: 20px;
+      padding: 14px 18px;
+      background-color: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      color: #1e40af;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      min-height: 60px;
+    }
+    .shape-style {
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Diagram Venn: Analisis Arif & Dian</h2>
+  
+  <div class="premis-box">
+    <strong>Premis 1:</strong> Semua yang lolos seleksi administrasi berhak mengikuti tes kompetensi.<br>
+    <strong>Premis 2:</strong> Arif lolos seleksi administrasi & lulusan terbaik univ. negeri.<br>
+    <strong>Premis 3:</strong> Dian mengikuti tes kompetensi & persiapan 6 bulan.
+  </div>
+
+  <div class="svg-container">
+    <svg viewBox="0 0 500 300">
+      <!-- Himpunan Semesta / Berhak Tes Kompetensi (Lingkaran Hijau Besar) -->
+      <circle id="c-kompetensi" class="shape-style" cx="250" cy="150" r="130" fill="#a7f3d0" stroke="#10b981" stroke-width="2.5" opacity="0.4"/>
+      
+      <!-- Sub-Himpunan Lolos Administrasi (Lingkaran Biru Dalam) -->
+      <circle id="c-administrasi" class="shape-style" cx="190" cy="150" r="70" fill="#93c5fd" stroke="#2563eb" stroke-width="2" opacity="0.6"/>
+
+      <!-- Titik Arif (Di dalam Administrasi) -->
+      <circle id="p-arif" class="shape-style" cx="180" cy="150" r="7" fill="#1e3a8a"/>
+      <text id="t-arif" x="180" y="135" fill="#1e3a8a" font-size="12" font-weight="bold" text-anchor="middle">Arif</text>
+
+      <!-- Titik Dian (Di luar Administrasi, Tapi di dalam Tes Kompetensi) -->
+      <circle id="p-dian" class="shape-style" cx="310" cy="150" r="7" fill="#dc2626"/>
+      <text id="t-dian" x="310" y="135" fill="#dc2626" font-size="12" font-weight="bold" text-anchor="middle">Dian</text>
+
+      <!-- Label Himpunan -->
+      <text x="250" y="40" fill="#047857" font-size="13" font-weight="bold" text-anchor="middle">Berhak Tes Kompetensi (Semesta)</text>
+      <text x="190" y="200" fill="#1e40af" font-size="11" font-weight="bold" text-anchor="middle">Lolos Administrasi</text>
+      <text x="310" y="200" fill="#991b1b" font-size="11" font-weight="bold" text-anchor="middle">Area Luar Administrasi</text>
+    </svg>
+  </div>
+
+  <div class="btn-container">
+    <button onclick="showArif()">Analisis Arif (Modus Ponens)</button>
+    <button onclick="showDian()">Analisis Dian (Affirming Consequent)</button>
+    <button class="highlight" onclick="showKesimpulan()">Sorot Opsi B (Kesimpulan Valid)</button>
+    <button class="reset" onclick="resetView()">Reset</button>
+  </div>
+
+  <div class="explanation" id="exp-text">
+    Klik tombol di atas untuk melihat pembuktian kedudukan logika Arif dan Dian.
+  </div>
+</div>
+
+<script>
+  const kompetensi = document.getElementById('c-kompetensi');
+  const administrasi = document.getElementById('c-administrasi');
+  const arif = document.getElementById('p-arif');
+  const dian = document.getElementById('p-dian');
+  const exp = document.getElementById('exp-text');
+
+  function resetView() {
+    kompetensi.setAttribute('opacity', '0.4');
+    administrasi.setAttribute('opacity', '0.6');
+    arif.setAttribute('r', '7');
+    dian.setAttribute('r', '7');
+    exp.innerHTML = "Klik tombol di atas untuk melihat pembuktian kedudukan logika Arif dan Dian.";
+  }
+
+  function showArif() {
+    resetView();
+    administrasi.setAttribute('opacity', '0.9');
+    arif.setAttribute('r', '11');
+    exp.innerHTML = "<strong>Analisis Arif:</strong> Arif berada di dalam himpunan <i>Lolos Administrasi</i> (biru). Karena lingkaran biru 100% berada di dalam <i>Tes Kompetensi</i> (hijau), Arif <b>PASTI berhak mengikuti tes kompetensi</b> (Hukum Modus Ponens).";
+  }
+
+  function showDian() {
+    resetView();
+    kompetensi.setAttribute('opacity', '0.8');
+    dian.setAttribute('r', '11');
+    exp.innerHTML = "<strong>Analisis Dian:</strong> Dian berada di wilayah <i>Tes Kompetensi</i>, tetapi berada di luar lingkaran <i>Lolos Administrasi</i>. Memastikan Dian lolos administrasi adalah kesalahan logika (<i>affirming the consequent</i>). Dian <b>mungkin tidak lolos seleksi administrasi</b> (misal: lewat jalur khusus).";
+  }
+
+  function showKesimpulan() {
+    resetView();
+    arif.setAttribute('r', '10');
+    dian.setAttribute('r', '10');
+    administrasi.setAttribute('opacity', '0.8');
+    kompetensi.setAttribute('opacity', '0.8');
+    exp.innerHTML = "<strong>Kesimpulan (Opsi B):</strong> Arif <b>pasti berhak</b> mengikuti tes kompetensi, sedangkan Dian <b>mungkin tidak lolos</b> seleksi administrasi.";
+  }
+</script>
+
+</body>
+</html>
