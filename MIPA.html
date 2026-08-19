@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagram Venn Interaktif - Logika Fakultas MIPA</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --mipa-color: #3b82f6;
+      --lab-color: #f59e0b;
+      --minat-color: #10b981;
+      --highlight-color: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 850px;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid #334155;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--accent-blue);
+      margin-bottom: 8px;
+      font-size: 1.5rem;
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+
+    .premis-box {
+      background-color: #0f172a;
+      border-left: 4px solid var(--accent-blue);
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .visual-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #0f172a;
+      border-radius: 12px;
+      padding: 15px;
+      border: 1px solid #334155;
+      position: relative;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      max-width: 380px;
+    }
+
+    /* Styling Elemen SVG */
+    .circle-mipa {
+      fill: rgba(59, 130, 246, 0.15);
+      stroke: var(--mipa-color);
+      stroke-width: 2.5;
+      transition: all 0.3s ease;
+    }
+
+    .circle-lab {
+      fill: rgba(245, 158, 11, 0.2);
+      stroke: var(--lab-color);
+      stroke-width: 2.5;
+      transition: all 0.3s ease;
+    }
+
+    .circle-minat {
+      fill: rgba(16, 185, 129, 0.2);
+      stroke: var(--minat-color);
+      stroke-width: 2.5;
+      transition: all 0.3s ease;
+    }
+
+    .highlight-irisan {
+      fill: var(--highlight-color);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .highlight-irisan.active {
+      opacity: 0.85;
+    }
+
+    text {
+      font-size: 11px;
+      font-weight: 600;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .control-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .btn {
+      background-color: #334155;
+      color: var(--text-main);
+      border: 1px solid #475569;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      text-align: left;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+    }
+
+    .btn:hover {
+      background-color: #475569;
+      border-color: #64748b;
+    }
+
+    .btn.active {
+      background-color: #0284c7;
+      border-color: var(--accent-blue);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .info-card {
+      margin-top: 10px;
+      background: #0f172a;
+      border-left: 4px solid var(--accent-blue);
+      padding: 12px 14px;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      min-height: 95px;
+    }
+
+    .info-card strong {
+      color: var(--accent-blue);
+      display: block;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Visualisasi Diagram Venn - Silogisme</h2>
+  <p class="subtitle">Pembuktian Logika Fakultas MIPA & Lab Bahasa</p>
+
+  <div class="premis-box">
+    <strong>Premis 1:</strong> Tidak semua Fakultas MIPA menyediakan fasilitas laboratorium bahasa.<br>
+    <strong>Premis 2:</strong> Beberapa orang berminat masuk Fakultas MIPA.
+  </div>
+
+  <div class="main-content">
+    <!-- SVG Diagram Venn -->
+    <div class="visual-box">
+      <svg viewBox="0 0 400 340" id="venn-svg">
+        <!-- Himpunan 1: Fakultas MIPA (Tengah) -->
+        <circle id="c-mipa" cx="200" cy="170" r="100" class="circle-mipa" />
+        
+        <!-- Himpunan 2: Lab Bahasa (Kiri, Beririsan Parsial dengan MIPA) -->
+        <circle id="c-lab" cx="130" cy="170" r="85" class="circle-lab" />
+        
+        <!-- Himpunan 3: Orang Berminat (Kanan, Beririsan dengan MIPA) -->
+        <circle id="c-minat" cx="270" cy="170" r="85" class="circle-minat" />
+
+        <!-- Area Highlight: Irisan Orang Berminat & MIPA yang DILUAR Lab Bahasa -->
+        <path id="path-irisan" class="highlight-irisan" 
+              d="M 233.5,91.8 A 85,85 0 0,1 233.5,248.2 A 100,100 0 0,0 233.5,91.8 Z" />
+
+        <!-- Teks Label Himpunan -->
+        <text x="75" y="174" fill="#f59e0b" text-anchor="middle">Fasilitas Lab Bahasa</text>
+        <text x="200" y="95" fill="#60a5fa" text-anchor="middle">Fakultas MIPA</text>
+        <text x="325" y="174" fill="#34d399" text-anchor="middle">Orang Berminat</text>
+        
+        <!-- Label Irisan Kunci (Opsi D) -->
+        <text x="248" y="174" id="label-irisan" fill="#ffffff" text-anchor="middle" font-size="10" opacity="0">★ Opsi D</text>
+      </svg>
+    </div>
+
+    <!-- Panel Tombol Interaktif -->
+    <div class="control-box">
+      <button class="btn" onclick="highlight('p1', this)">
+        <span class="dot" style="background-color: var(--lab-color);"></span>
+        1. Analisis Premis 1 (Lab Bahasa)
+      </button>
+
+      <button class="btn" onclick="highlight('p2', this)">
+        <span class="dot" style="background-color: var(--minat-color);"></span>
+        2. Analisis Premis 2 (Berminat MIPA)
+      </button>
+
+      <button class="btn" onclick="highlight('opsi-d', this)">
+        <span class="dot" style="background-color: var(--highlight-color);"></span>
+        3. Sorot Kesimpulan (Opsi D)
+      </button>
+
+      <button class="btn active" onclick="highlight('reset', this)">
+        <span class="dot" style="background-color: #64748b;"></span>
+        Reset / Tampilkan Semua
+      </button>
+
+      <!-- Panel Deskripsi -->
+      <div class="info-card" id="info-box">
+        <strong>Penjelasan Logika:</strong>
+        Pilih salah satu tombol di atas untuk mensimulasikan pembentukan diagram Venn secara berurutan.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function highlight(mode, btnElement) {
+    document.querySelectorAll('.btn').forEach(btn => btn.classList.remove('active'));
+    btnElement.classList.add('active');
+
+    const cMipa = document.getElementById('c-mipa');
+    const cLab = document.getElementById('c-lab');
+    const cMinat = document.getElementById('c-minat');
+    const pathIrisan = document.getElementById('path-irisan');
+    const labelIrisan = document.getElementById('label-irisan');
+    const infoBox = document.getElementById('info-box');
+
+    // Reset Style awal
+    cMipa.style.opacity = "1";
+    cLab.style.opacity = "1";
+    cMinat.style.opacity = "1";
+    pathIrisan.classList.remove('active');
+    labelIrisan.style.opacity = "0";
+
+    if (mode === 'p1') {
+      cMinat.style.opacity = "0.15";
+      infoBox.innerHTML = "<strong>Premis 1 (Tidak semua MIPA punya lab bahasa):</strong><br>Berarti ada bagian dari <i>Fakultas MIPA</i> yang berada di luar lingkaran <i>Lab Bahasa</i> (MIPA tanpa fasilitas lab bahasa).";
+    } 
+    else if (mode === 'p2') {
+      cLab.style.opacity = "0.15";
+      infoBox.innerHTML = "<strong>Premis 2 (Irisan Minat & MIPA):</strong><br>Lingkaran <i>Orang Berminat</i> beririsan dengan lingkaran <i>Fakultas MIPA</i>. Sebagian orang berminat untuk masuk Fakultas MIPA.";
+    } 
+    else if (mode === 'opsi-d') {
+      cLab.style.opacity = "0.2";
+      cMipa.style.opacity = "0.4";
+      cMinat.style.opacity = "0.4";
+      pathIrisan.classList.add('active');
+      labelIrisan.style.opacity = "1";
+      infoBox.innerHTML = "<strong>Pembuktian Opsi D (BENAR):</strong><br>Area merah (★) adalah calon mahasiswa yang berminat masuk Fakultas MIPA, yang kampusnya tidak memiliki fasilitas lab bahasa. Terbukti bahwa <b>beberapa orang berminat masuk fakultas MIPA yang tidak menyediakan fasilitas lab. bahasa.</b>";
+    } 
+    else {
+      infoBox.innerHTML = "<strong>Kondisi Utuh Diagram Venn:</strong><br>Menunjukkan cakupan himpunan lengkap dari penggabungan kedua premis.";
+    }
+  }
+</script>
+
+</body>
+  </html>
+  
