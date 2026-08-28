@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagram Venn Interaktif - Pegawai & Divisi</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --komunikasi-color: #f59e0b;
+      --pemasaran-color: #3b82f6;
+      --keuangan-color: #10b981;
+      --highlight-color: #ef4444;
+      --highlight-c-color: #a855f7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 850px;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid #334155;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--accent-blue);
+      margin-bottom: 8px;
+      font-size: 1.5rem;
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+
+    .premis-box {
+      background-color: #0f172a;
+      border-left: 4px solid var(--accent-blue);
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .visual-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #0f172a;
+      border-radius: 12px;
+      padding: 15px;
+      border: 1px solid #334155;
+      position: relative;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      max-width: 380px;
+    }
+
+    .circle-komunikasi {
+      fill: rgba(245, 158, 11, 0.12);
+      stroke: var(--komunikasi-color);
+      stroke-width: 2.5;
+      transition: all 0.3s ease;
+    }
+
+    .circle-pemasaran {
+      fill: rgba(59, 130, 246, 0.25);
+      stroke: var(--pemasaran-color);
+      stroke-width: 2.5;
+      transition: all 0.3s ease;
+    }
+
+    .circle-keuangan {
+      fill: rgba(16, 185, 129, 0.25);
+      stroke: var(--keuangan-color);
+      stroke-width: 2.5;
+      transition: all 0.3s ease;
+    }
+
+    .highlight-irisan {
+      fill: var(--highlight-color);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .highlight-irisan.active {
+      opacity: 0.85;
+    }
+
+    .highlight-luar {
+      fill: var(--highlight-c-color);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .highlight-luar.active {
+      opacity: 0.6;
+    }
+
+    text {
+      font-size: 11px;
+      font-weight: 600;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .control-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .btn {
+      background-color: #334155;
+      color: var(--text-main);
+      border: 1px solid #475569;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      text-align: left;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+    }
+
+    .btn:hover {
+      background-color: #475569;
+      border-color: #64748b;
+    }
+
+    .btn.active {
+      background-color: #0284c7;
+      border-color: var(--accent-blue);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .info-card {
+      margin-top: 10px;
+      background: #0f172a;
+      border-left: 4px solid var(--accent-blue);
+      padding: 12px 14px;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      min-height: 95px;
+    }
+
+    .info-card strong {
+      color: var(--accent-blue);
+      display: block;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Visualisasi Diagram Venn - Silogisme</h2>
+  <p class="subtitle">Pegawai Divisi Pemasaran & Keuangan Pandai Berkomunikasi</p>
+
+  <div class="premis-box">
+    <strong>Premis 1:</strong> Semua pegawai divisi pemasaran pandai berkomunikasi.<br>
+    <strong>Premis 2:</strong> Semua pegawai divisi keuangan pandai berkomunikasi.<br>
+    <strong>Premis 3:</strong> Sebagian pegawai divisi pemasaran juga bertugas di divisi keuangan.
+  </div>
+
+  <div class="main-content">
+    <!-- SVG Diagram Venn -->
+    <div class="visual-box">
+      <svg viewBox="0 0 400 360" id="venn-svg">
+        <!-- Himpunan Utama: Pandai Berkomunikasi (Outer Circle) -->
+        <circle id="c-komunikasi" cx="200" cy="180" r="160" class="circle-komunikasi" />
+        
+        <!-- Area Himpunan Luar (K \ (P u Q)) untuk Opsi C -->
+        <path id="path-luar" class="highlight-luar" fill-rule="evenodd"
+              d="M 200,20 A 160,160 0 1,0 200,340 A 160,160 0 1,0 200,20 Z 
+                 M 160,120 A 65,65 0 1,1 160,240 A 65,65 0 1,1 160,120 Z 
+                 M 240,120 A 65,65 0 1,1 240,240 A 65,65 0 1,1 240,120 Z" />
+
+        <!-- Sub-Himpunan 1: Divisi Pemasaran (Kiri) -->
+        <circle id="c-pemasaran" cx="160" cy="180" r="65" class="circle-pemasaran" />
+        
+        <!-- Sub-Himpunan 2: Divisi Keuangan (Kanan) -->
+        <circle id="c-keuangan" cx="240" cy="180" r="65" class="circle-keuangan" />
+
+        <!-- Area Irisan Pemasaran & Keuangan (P3) -->
+        <path id="path-irisan" class="highlight-irisan" 
+              d="M 200,130 A 65,65 0 0,0 200,230 A 65,65 0 0,0 200,130 Z" />
+
+        <!-- Teks Label Himpunan -->
+        <text x="200" y="42" fill="#f59e0b" text-anchor="middle">Pandai Berkomunikasi (K)</text>
+        <text x="135" y="184" fill="#93c5fd" text-anchor="middle">Pemasaran (P)</text>
+        <text x="265" y="184" fill="#6ee7b7" text-anchor="middle">Keuangan (Q)</text>
+        
+        <!-- Label Irisan & Luar -->
+        <text x="200" y="184" id="label-irisan" fill="#ffffff" text-anchor="middle" font-size="10" opacity="0">★ Irisan</text>
+        <text x="200" y="80" id="label-luar" fill="#e9d5ff" text-anchor="middle" font-size="10" opacity="0">★ Opsi C (Pegawai Luar)</text>
+      </svg>
+    </div>
+
+    <!-- Panel Tombol Interaktif -->
+    <div class="control-box">
+      <button class="btn" onclick="highlight('p12', this)">
+        <span class="dot" style="background-color: var(--komunikasi-color);"></span>
+        1. Premis 1 & 2 (Subset K)
+      </button>
+
+      <button class="btn" onclick="highlight('p3', this)">
+        <span class="dot" style="background-color: var(--highlight-color);"></span>
+        2. Premis 3 (Irisan P & Q)
+      </button>
+
+      <button class="btn" onclick="highlight('opsi-c', this)">
+        <span class="dot" style="background-color: var(--highlight-c-color);"></span>
+        3. Visualisasi Opsi C
+      </button>
+
+      <button class="btn active" onclick="highlight('reset', this)">
+        <span class="dot" style="background-color: #64748b;"></span>
+        Reset / Tampilkan Semua
+      </button>
+
+      <!-- Panel Deskripsi -->
+      <div class="info-card" id="info-box">
+        <strong>Penjelasan Logika:</strong>
+        Pilih salah satu tombol di atas untuk mensimulasikan pemetaan diagram Venn secara berurutan.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function highlight(mode, btnElement) {
+    document.querySelectorAll('.btn').forEach(btn => btn.classList.remove('active'));
+    btnElement.classList.add('active');
+
+    const cKomunikasi = document.getElementById('c-komunikasi');
+    const cPemasaran = document.getElementById('c-pemasaran');
+    const cKeuangan = document.getElementById('c-keuangan');
+    const pathIrisan = document.getElementById('path-irisan');
+    const pathLuar = document.getElementById('path-luar');
+    const labelIrisan = document.getElementById('label-irisan');
+    const labelLuar = document.getElementById('label-luar');
+    const infoBox = document.getElementById('info-box');
+
+    // Reset Style awal
+    cKomunikasi.style.opacity = "1";
+    cPemasaran.style.opacity = "1";
+    cKeuangan.style.opacity = "1";
+    pathIrisan.classList.remove('active');
+    pathLuar.classList.remove('active');
+    labelIrisan.style.opacity = "0";
+    labelLuar.style.opacity = "0";
+
+    if (mode === 'p12') {
+      infoBox.innerHTML = "<strong>Premis 1 & 2 (Inklusi Himpunan):</strong><br>Seluruh anggota <i>Divisi Pemasaran</i> dan <i>Divisi Keuangan</i> berada sepenuhnya di dalam himpunan besar <i>Pandai Berkomunikasi</i>.";
+    } 
+    else if (mode === 'p3') {
+      pathIrisan.classList.add('active');
+      labelIrisan.style.opacity = "1";
+      infoBox.innerHTML = "<strong>Premis 3 (Irisan Pemasaran & Keuangan):</strong><br>Area merah (★) menunjukkan pegawai yang bertugas di <i>Pemasaran DAN Keuangan</i>. Karena berada di dalam lingkaran luar, mereka <b>pasti pandai berkomunikasi</b>.";
+    } 
+    else if (mode === 'opsi-c') {
+      cPemasaran.style.opacity = "0.3";
+      cKeuangan.style.opacity = "0.3";
+      pathLuar.classList.add('active');
+      labelLuar.style.opacity = "1";
+      infoBox.innerHTML = "<strong>Visualisasi Asumsi Kunci Opsi C:</strong><br>Area ungu mengasumsikan himpunan <i>Pandai Berkomunikasi</i> melingkupi pegawai di luar Pemasaran & Keuangan (misal HRD/IT). Ini adalah dasar mengapa pembuat soal TPA mematok C sebagai jawaban.";
+    } 
+    else {
+      infoBox.innerHTML = "<strong>Kondisi Utuh Diagram Venn:</strong><br>Menunjukkan penggabungan ketiga premis dalam satu struktur himpunan terpadu.";
+    }
+  }
+</script>
+
+</body>
+          </html>
+          
